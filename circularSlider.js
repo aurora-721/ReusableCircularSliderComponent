@@ -25,9 +25,11 @@ class CircularSlider extends HTMLElement {
             step: 1,
             radius: 10
         };
+
+        this.circleClicked = false;
     }
 
-    changePosition(e) {
+    changePosOnMouseOver(e) {
         console.log(e);
         const circle = this.shadowRoot.querySelector('.circle');
         const circleRadius = 10;
@@ -35,7 +37,7 @@ class CircularSlider extends HTMLElement {
 
         let mPos = {x: e.clientX - circle.offsetLeft - circleRadius, y: e.clientY - circle.offsetTop - circleRadius};
         let atan = Math.atan2(mPos.x, mPos.y);
-        let deg = -atan/(Math.PI/180) + 180; // final (0-360 positive) degrees from mouse position 
+        let deg = -atan/(Math.PI/180) + 180;
         
         //console.log(circle.offsetLeft, circle.offsetTop);
         console.log(deg)
@@ -55,8 +57,17 @@ class CircularSlider extends HTMLElement {
     }
 
     connectedCallback() {
-        this.shadowRoot.querySelector('.circle').addEventListener('mousemove', (e) => {
-            this.changePosition(e)
+        //mouse clicks on circle
+        this.shadowRoot.querySelector('.circle').addEventListener('mousedown', (e) => {
+            this.circleClicked = true;
+        })
+        document.querySelector('html').addEventListener('mousemove', (e) => {
+            if(this.circleClicked) {
+                this.changePosOnMouseOver(e);
+            }
+        })
+        document.querySelector('html').addEventListener('mouseup', (e) => {
+            this.circleClicked = false;
         })
 
 
@@ -87,7 +98,7 @@ class CircularSlider extends HTMLElement {
         // defining the position of the circle
         const circle = this.shadowRoot.querySelector('.circle');
 
-
+        //initialize circle position
         circle.style.transform = this.calculatePosition(0);
 
         console.log(this.options);
