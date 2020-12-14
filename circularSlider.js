@@ -18,14 +18,17 @@ class CircularSlider extends HTMLElement {
         this.shadowRoot.appendChild(template.content.cloneNode(true));
     }
 
-    changeColor() {
+    changePosition() {
         const circle = this.shadowRoot.querySelector('.circle');
-        circle.style.backgroundColor = 'red';
+        let position = 20;
+
+        circle.style.transform = "rotate(" + position + "deg) translate(20px, 20px)";
+        
     }
 
     connectedCallback() {
         this.shadowRoot.querySelector('.circle').addEventListener('click', () => {
-            this.changeColor()
+            this.changePosition()
         })
     }
 }
