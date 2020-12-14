@@ -27,19 +27,36 @@ class CircularSlider extends HTMLElement {
         };
     }
 
-    changePosition() {
+    changePosition(e) {
+        console.log(e);
         const circle = this.shadowRoot.querySelector('.circle');
-        let deg = 45;
+        const circleRadius = 10;
+        console.log(circleRadius);
 
-        circle.style.transform = "rotate(" + deg + "deg) translate(" + this.options.radius * Math.cos(deg*Math.PI/180) + "em," +  this.options.radius * Math.sin(deg*Math.PI/180) +"em)";
+        let mPos = {x: e.clientX - circle.offsetLeft - circleRadius, y: e.clientY - circle.offsetTop - circleRadius};
+        let atan = Math.atan2(mPos.x, mPos.y);
+        let deg = -atan/(Math.PI/180) + 180; // final (0-360 positive) degrees from mouse position 
+        
+        //console.log(circle.offsetLeft, circle.offsetTop);
+        console.log(deg)
+        
+
+        //circle.style.transform = "translate(" + 0 + "px," + 0 + "px)";
+        circle.style.transform = this.calculatePosition(deg);
         
     }
 
-    
+    calculatePosition(deg) {
+        let posX = this.options.radius* Math.sin(deg*Math.PI/180);
+        let posY = this.options.radius* -Math.cos(deg*Math.PI/180);
+        console.log(posX, posY);
+
+        return "translate(" + posX + "em," +  posY +"em)";
+    }
 
     connectedCallback() {
-        this.shadowRoot.querySelector('.circle').addEventListener('click', () => {
-            this.changePosition()
+        this.shadowRoot.querySelector('.circle').addEventListener('mousemove', (e) => {
+            this.changePosition(e)
         })
 
 
@@ -63,15 +80,15 @@ class CircularSlider extends HTMLElement {
             this.options.step = this.getAttribute('step');
         }
 
-        let deg = 0;
         
         // defining the radius of the circle
         this.shadowRoot.querySelector('.slider').style.width = 2 * this.options.radius + "em";
         this.shadowRoot.querySelector('.slider').style.height = 2 * this.options.radius + "em";
         // defining the position of the circle
         const circle = this.shadowRoot.querySelector('.circle');
-        circle.style.transform = "rotate(" + deg + "deg) translate(" + this.options.radius * Math.cos(deg*Math.PI/180) + "em," +  this.options.radius * Math.sin(deg*Math.PI/180) +"em)";
-        
+
+
+        circle.style.transform = this.calculatePosition(0);
 
         console.log(this.options);
 
