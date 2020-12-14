@@ -4,8 +4,6 @@
   margin: 1em;
 }
 .slider {
-  width: 20em;
-  height: 20em;
   border-radius: 100%;
   border: 1em solid #bbb;
   display: flex;
