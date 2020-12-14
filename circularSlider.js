@@ -1,18 +1,7 @@
 const template = document.createElement('template');
 template.innerHTML = `
-    <style>
-        .slider-container {
-            background-color: #fff;
-            padding: 1em;
-            margin: 1em;
-        }
-        .slider {
-            width: 20em;
-            height: 20em;
-            border-radius: 100%;
-            border: 1em solid #bbb;
-        }
-    </style>
+    <link rel="stylesheet" href="./styles/circularSlider.css" />
+
     <div class="slider-container">
         <div class="slider">
             <div class="circle">
@@ -28,6 +17,18 @@ class CircularSlider extends HTMLElement {
         this.attachShadow({mode: 'open'})
         this.shadowRoot.appendChild(template.content.cloneNode(true));
     }
+
+    changeColor() {
+        const circle = this.shadowRoot.querySelector('.circle');
+        circle.style.backgroundColor = 'red';
+    }
+
+    connectedCallback() {
+        this.shadowRoot.querySelector('.circle').addEventListener('click', () => {
+            this.changeColor()
+        })
+    }
 }
 
 window.customElements.define('circular-slider', CircularSlider);
+
