@@ -36,7 +36,9 @@ class CircularSlider extends HTMLElement {
 
     changePosOnMouseOver(e) {
         const circle = this.shadowRoot.querySelector('.circle');
-        circle.style.transform = this.calculateMousePosition(e, circle);
+        
+        let deg = this.calculateMousePosition(e, circle)
+        circle.style.transform = "rotate(" + deg + "deg)";
     }
 
     calculateMousePosition(e, circle) {
@@ -45,14 +47,14 @@ class CircularSlider extends HTMLElement {
         // circle offset - position of the circle in its initial position
         // circleConf.radius - the dimensions of the small circle
         let mPos = {x: e.clientX - circle.offsetLeft - this.circleConf.radius,
-            y: e.clientY - this.options.radius - circle.offsetTop - this.circleConf.radius};
+            y: e.clientY - this.options.radius - circle.offsetTop};
         
 
         //returns string that can be used to rotate the circle
         let atan = Math.atan2(mPos.x, mPos.y);
         let deg = -atan/(Math.PI/180) + 180;
         
-        return "rotate(" + deg + "deg)";
+        return deg;
 
         //let posX = this.options.radius* Math.sin(deg*Math.PI/180);
         //let posY = this.options.radius* -Math.cos(deg*Math.PI/180);
@@ -61,14 +63,25 @@ class CircularSlider extends HTMLElement {
 
     animateToFixedPosition(e) {
         const circle = this.shadowRoot.querySelector('.circle');
-        this.calculateMousePosition(e, circle);
+        let mouseDeg = this.calculateMousePosition(e, circle);
+        let deg = this.calculateClosestDeg(mouseDeg);
 
-        circle.style.transform = "rotate(0deg)";
+        circle.style.transform = "rotate("+ deg + "deg)";
         circle.style.transition =  "transform 0.4s cubic-bezier(0.33, 1, 0.68, 1)";
     }
 
+    calculateClosestDeg(mouseDeg) {
+        // Takes the difference between max and min value and divides it with step - this gives the num of slices
+        let circleDivisions = (this.options.maxVal - this.options.minVal) / this.options.step;
+        // then 360 is divided with that number
+        let angleDeg = 360 / circleDivisions;
+        // rounds the angle to the nearest angle
+        let numOfAngleDeg = Math.round(mouseDeg/angleDeg);
+        let deg = angleDeg * numOfAngleDeg;
+        console.log(deg);
 
-
+        return deg;
+    }
 
 
     
