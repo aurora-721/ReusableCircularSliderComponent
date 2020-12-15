@@ -23,43 +23,56 @@ class CircularSlider extends HTMLElement {
             minVal: 0,
             maxVal: 100,
             step: 1,
-            radius: 10
+            radius: 100
         };
 
         this.circleClicked = false;
     }
 
     changePosOnMouseOver(e) {
-        console.log(e);
         const circle = this.shadowRoot.querySelector('.circle');
-        const circleRadius = 10;
-        console.log(circleRadius);
+        const circleRadius = 10;    //this is based on the default style of the small circle and is in px
 
-        let mPos = {x: e.clientX - circle.offsetLeft - circleRadius, y: e.clientY - circle.offsetTop - circleRadius};
+        //relative position of cursor calculated, circle radius is subtracted so that the measurement is from the center
+        let mPos = {x: e.clientX - circle.offsetLeft - circleRadius, y: e.clientY - this.options.radius - circle.offsetTop - circleRadius};
+        
+        circle.style.transform = this.calculateMousePosition(mPos);
+        
+
+        
+    }
+
+    calculateMousePosition(mPos) {
+        //returns string that can be used to translate circle
         let atan = Math.atan2(mPos.x, mPos.y);
         let deg = -atan/(Math.PI/180) + 180;
-        
-        //console.log(circle.offsetLeft, circle.offsetTop);
-        console.log(deg)
-        
 
-        //circle.style.transform = "translate(" + 0 + "px," + 0 + "px)";
-        circle.style.transform = this.calculatePosition(deg);
-        
+        //let posX = this.options.radius* Math.sin(deg*Math.PI/180);
+        //let posY = this.options.radius* -Math.cos(deg*Math.PI/180);
+
+        //return "translate(" + posX + "em," +  posY +"em)";
+        return "rotate(" + deg + "deg)";
     }
 
-    calculatePosition(deg) {
-        let posX = this.options.radius* Math.sin(deg*Math.PI/180);
-        let posY = this.options.radius* -Math.cos(deg*Math.PI/180);
-        console.log(posX, posY);
+    animateToFixedPosition() {
+        //let mPos = {x: e.clientX - circle.offsetLeft - circleRadius, y: e.clientY - circle.offsetTop - circleRadius};
+        const circle = this.shadowRoot.querySelector('.circle');
 
-        return "translate(" + posX + "em," +  posY +"em)";
+        circle.style.transform = "rotate(0deg)";
+        circle.style.transition =  "transform 0.4s cubic-bezier(0.33, 1, 0.68, 1)";
+
+
+
     }
+    
 
     connectedCallback() {
         //mouse clicks on circle
         this.shadowRoot.querySelector('.circle').addEventListener('mousedown', (e) => {
             this.circleClicked = true;
+            
+            //when mouse pressed there are no transitions
+            circle.style.transition = 'none';
         })
         document.querySelector('html').addEventListener('mousemove', (e) => {
             if(this.circleClicked) {
@@ -68,6 +81,8 @@ class CircularSlider extends HTMLElement {
         })
         document.querySelector('html').addEventListener('mouseup', (e) => {
             this.circleClicked = false;
+            this.animateToFixedPosition();
+
         })
 
 
@@ -93,15 +108,11 @@ class CircularSlider extends HTMLElement {
 
         
         // defining the radius of the circle
-        this.shadowRoot.querySelector('.slider').style.width = 2 * this.options.radius + "em";
-        this.shadowRoot.querySelector('.slider').style.height = 2 * this.options.radius + "em";
+        this.shadowRoot.querySelector('.slider').style.width = 2 * this.options.radius + "px";
+        this.shadowRoot.querySelector('.slider').style.height = 2 * this.options.radius + "px";
         // defining the position of the circle
         const circle = this.shadowRoot.querySelector('.circle');
 
-        //initialize circle position
-        circle.style.transform = this.calculatePosition(0);
-
-        console.log(this.options);
 
     }
 }
