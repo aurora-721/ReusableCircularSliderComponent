@@ -14,7 +14,7 @@ template.innerHTML = `
         </svg>
 
 
-        <svg id="circularSliderRoot" width="700" height="700" viewBox="-200 -200 400 400">
+        <svg id="circularSliderRokot" width="700" height="700" viewBox="-200 -200 400 400">
             <circle cx="0" cy="0" r="180" fill="none" class="dashed-circle" transform="rotate(-90)" style="stroke-width: 20px; stroke-dasharray: 5, 2;">
             </circle>
             <circle cx="0" cy="0" r="180" fill="none" class="invisible-layer" style="stroke-width: 20px; stroke: transparent;">
@@ -66,9 +66,16 @@ class CircularSlider extends HTMLElement {
         // e.clientX - position of the mouse on the screen
         // circle offset - position of the circle in its initial position
         // circleConf.radius - the dimensions of the small circle
-        let mPos = {x: e.clientX - circle.offsetLeft - this.circleConf.radius,
-            y: e.clientY - this.options.radius - circle.offsetTop};
+        //let mPos = {x: e.clientX - circle.offsetLeft - this.circleConf.radius,
+        //    y: e.clientY - this.options.radius - circle.offsetTop};
         
+        let svg = this.shadowRoot.getElementById('circularSliderRoot');
+        let CTM = svg.getScreenCTM();
+        let dragX = (e.clientX - CTM.e) / CTM.a;
+        let dragY = (e.clientY - CTM.f) / CTM.d;
+        let mPos = {x: dragX, y: dragY};
+        console.log(dragX, dragY);
+
 
         //returns string that can be used to rotate the circle
         let atan = Math.atan2(mPos.x, mPos.y);
@@ -76,9 +83,6 @@ class CircularSlider extends HTMLElement {
         
         return deg;
 
-        //let posX = this.options.radius* Math.sin(deg*Math.PI/180);
-        //let posY = this.options.radius* -Math.cos(deg*Math.PI/180);
-        //return "translate(" + posX + "em," +  posY +"em)";
     }
 
     animateToFixedPosition(e) {
@@ -88,6 +92,9 @@ class CircularSlider extends HTMLElement {
 
         circle.style.transform = "rotate("+ deg + "deg)";
         circle.style.transition =  "transform 0.4s cubic-bezier(0.33, 1, 0.68, 1)";
+
+        const smallCircle = this.shadowRoot.querySelector('.small-circle');
+        mouseDeg = this.calculateMousePosition(e, smallCircle);
     }
 
     calculateClosestDeg(mouseDeg) {
@@ -98,7 +105,6 @@ class CircularSlider extends HTMLElement {
         // rounds the angle to the nearest angle
         let numOfAngleDeg = Math.round(mouseDeg/angleDeg);
         let deg = angleDeg * numOfAngleDeg;
-        console.log(deg);
 
         return deg;
     }
@@ -112,7 +118,7 @@ class CircularSlider extends HTMLElement {
         
         const circle = this.shadowRoot.querySelector('.circle');
 
-        //mouse clicks on circle
+        //mouse clicks on circle OLD
         this.shadowRoot.querySelector('.circle').addEventListener('mousedown', (e) => {
             this.circleClicked = true;
             
@@ -127,8 +133,30 @@ class CircularSlider extends HTMLElement {
         document.querySelector('html').addEventListener('mouseup', (e) => {
             this.circleClicked = false;
             this.animateToFixedPosition(e);
-
         })
+
+
+
+        const smallCircle = this.shadowRoot.querySelector('.small-circle');
+
+        //mouse clicks on circle
+        this.shadowRoot.querySelector('.small-circle').addEventListener('mousedown', (e) => {
+            this.circleClicked = true;
+            
+            //when mouse pressed there are no transitions
+            smallCircle.style.transition = 'none';
+        })
+        this.shadowRoot.querySelector('.invisible-layer').addEventListener('mousemove', (e) => {
+            if(this.circleClicked) {
+                this.changePosOnMouseOver(e);
+            }
+        })
+        this.shadowRoot.querySelector('.invisible-layer').addEventListener('mouseup', (e) => {
+            this.circleClicked = false;
+            this.animateToFixedPosition(e);
+        })
+
+        
 
     }
 
