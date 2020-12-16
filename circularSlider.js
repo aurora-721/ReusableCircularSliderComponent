@@ -7,7 +7,27 @@ template.innerHTML = `
             <div class="circle">
             </div>
         </div>
+        <svg id="circularSliderRoot" width="700" height="700" viewBox="-200 -200 400 400">
+            <circle cx="0" cy="0" fill="none" class="dashed-circle" transform="rotate(-90)" style="stroke-width: 20px; stroke-dasharray: 5, 2;"></circle>
+            <circle cx="0" cy="0" fill="none" class="invisible-layer" style="stroke-width: 20px; stroke: transparent;"></circle>
+            <circle cx="0" cy="-100" fill="#fff" class="small-circle" id="handleslider180" style="transform: rotate(30deg); transition: all 0.5s ease-in-out 0s;"></circle>
+        </svg>
+
+
+        <svg id="circularSliderRoot" width="700" height="700" viewBox="-200 -200 400 400">
+            <circle cx="0" cy="0" r="180" fill="none" class="dashed-circle" transform="rotate(-90)" style="stroke-width: 20px; stroke-dasharray: 5, 2;">
+            </circle>
+            <circle cx="0" cy="0" r="180" fill="none" class="invisible-layer" style="stroke-width: 20px; stroke: transparent;">
+            </circle>
+            <circle cx="0" cy="0" r="180" fill="none" class="top-slider" transform="rotate(-90)" stroke-dasharray="1193.8052083641214 1193.8052083641214" stroke-dashoffset="628.8052083641214" style="stroke: rgb(93, 59, 109); stroke-width: 20px; transition: stroke-dashoffset 0.5s ease-in-out 0s;">
+            </circle>
+            <circle cx="0" cy="-180" fill="#fff" class="handle" id="handleslider180" style="transform: rotate(179.909deg); transition: all 0.5s ease-in-out 0s;">
+            </circle>
+        </svg>
+
     </div>
+
+    
 `;
 
 
@@ -27,7 +47,7 @@ class CircularSlider extends HTMLElement {
         };
 
         this.circleConf = {
-            radius: 10,
+            radius: 12,
             origin: [0, 0],
         };
 
@@ -134,17 +154,28 @@ class CircularSlider extends HTMLElement {
         }
 
 
-        // defining the radius of the circle
+        // defining the radius of the circle - OLD
         this.shadowRoot.querySelector('.slider').style.width = 2 * this.options.radius + "px";
         this.shadowRoot.querySelector('.slider').style.height = 2 * this.options.radius + "px";
-        // defining the position of the circle
+        // defining the position of the circle - OLD
         const circle = this.shadowRoot.querySelector('.circle');
-
-        this.circleConf.radius = this.options.radius / 10;    //this is based on the default style of the small circle and is in px
         
         this.shadowRoot.querySelector('.circle').style.width = 2 * this.circleConf.radius + "px";
         this.shadowRoot.querySelector('.circle').style.height = 2 * this.circleConf.radius + "px";
         this.shadowRoot.querySelector('.circle').style.transformOrigin  = this.circleConf.radius + "px " + this.options.radius + "px";
+
+
+
+        
+        //set default propreties for the circle
+        this.shadowRoot.querySelector('.dashed-circle').style.r = this.options.radius;
+        this.shadowRoot.querySelector('.invisible-layer').style.r = this.options.radius;
+        this.shadowRoot.querySelector('.small-circle').style.cy = -this.options.radius;
+        this.shadowRoot.querySelector('.small-circle').style.r = this.circleConf.radius;
+
+        this.shadowRoot.querySelector('.small-circle').style.transform = "rotate(90deg)";
+
+        
     }
 
 

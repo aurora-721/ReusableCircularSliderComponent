@@ -14,3 +14,32 @@
   background-color: #000;
   cursor: pointer;
 }
+
+#circularSliderRoot {
+  background-color: white;
+}
+
+#circularSliderRoot circle {
+  fill: none;
+  stroke-width: 10px;
+  overflow: visible;
+}
+
+#circularSliderRoot circle.small-circle {
+  fill: #fff;
+  stroke: #cfcfd0;
+  stroke-width: 1px;
+  cursor: pointer;
+}
+
+#circularSliderRoot .invisible-layer {
+  cursor: pointer;
+}
+
+#circularSliderRoot .dashed-circle {
+  stroke: #d0d0d0;
+}
+
+#circularSliderRoot .top-slider {
+  stroke-opacity: 0.8;
+}
