@@ -54,8 +54,7 @@ class CircularSlider extends HTMLElement {
         this.circleClicked = false;
     }
 
-    changePosOnMouseOver(e) {
-        const circle = this.shadowRoot.querySelector('.circle');
+    changePosOnMouseOver(e, circle) {
         
         let deg = this.calculateMousePosition(e, circle)
         circle.style.transform = "rotate(" + deg + "deg)";
@@ -74,8 +73,6 @@ class CircularSlider extends HTMLElement {
         let dragX = (e.clientX - CTM.e) / CTM.a;
         let dragY = (e.clientY - CTM.f) / CTM.d;
         let mPos = {x: dragX, y: dragY};
-        console.log(dragX, dragY);
-
 
         //returns string that can be used to rotate the circle
         let atan = Math.atan2(mPos.x, mPos.y);
@@ -85,8 +82,7 @@ class CircularSlider extends HTMLElement {
 
     }
 
-    animateToFixedPosition(e) {
-        const circle = this.shadowRoot.querySelector('.circle');
+    animateToFixedPosition(e, circle) {
         let mouseDeg = this.calculateMousePosition(e, circle);
         let deg = this.calculateClosestDeg(mouseDeg);
 
@@ -127,12 +123,12 @@ class CircularSlider extends HTMLElement {
         })
         document.querySelector('html').addEventListener('mousemove', (e) => {
             if(this.circleClicked) {
-                this.changePosOnMouseOver(e);
+                this.changePosOnMouseOver(e, circle);
             }
         })
         document.querySelector('html').addEventListener('mouseup', (e) => {
             this.circleClicked = false;
-            this.animateToFixedPosition(e);
+            this.animateToFixedPosition(e, circle);
         })
 
 
@@ -148,12 +144,12 @@ class CircularSlider extends HTMLElement {
         })
         this.shadowRoot.querySelector('.invisible-layer').addEventListener('mousemove', (e) => {
             if(this.circleClicked) {
-                this.changePosOnMouseOver(e);
+                this.changePosOnMouseOver(e, smallCircle);
             }
         })
         this.shadowRoot.querySelector('.invisible-layer').addEventListener('mouseup', (e) => {
             this.circleClicked = false;
-            this.animateToFixedPosition(e);
+            this.animateToFixedPosition(e, smallCircle);
         })
 
         
