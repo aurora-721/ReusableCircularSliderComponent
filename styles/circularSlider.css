@@ -1,20 +1,3 @@
-.slider-container {
-  background-color: #fff;
-  padding: 1em;
-  margin: 1em;
-}
-.slider {
-  display: flex;
-  justify-content: center;
-  background-color: rgb(163, 211, 253);
-  border-radius: 100%;
-}
-.circle {
-  border-radius: 100%;
-  background-color: #000;
-  cursor: pointer;
-}
-
 #circularSliderRoot {
   background-color: white;
 }
