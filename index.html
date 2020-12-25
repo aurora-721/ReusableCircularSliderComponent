@@ -11,7 +11,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link rel="shortcut icon" href="#" />
   
-  <link rel="stylesheet" href="../styles/app.css">
+  <link rel="stylesheet" href="./styles/app.css">
 
   <!-- If your application is compiled to ES5, then load this script first. -->
   <script src="./node_modules/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js"></script>
@@ -20,9 +20,55 @@
   <script src="./node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
   
   <script type="module" src="./build/app.bundle.js"></script>
+
 </head>
 
 <body>
-  <circular-slider color="#005" container=0 minVal=1 maxVal=220 step=50 radius=50><div></div></circular-slider>
+  
+  <circular-slider
+    options = '[
+    {
+      "container": 0,
+      "color": "#5d3b6d",
+      "minVal": 0,
+      "maxVal": 1000,
+      "step": 500,
+      "radius": 190
+    },
+    {
+      "container": 0,
+      "color": "#127fc3",
+      "minVal": 10,
+      "maxVal": 20,
+      "step": 2,
+      "radius": 160
+    },
+    {
+      "container": 0,
+      "color": "#22a823",
+      "minVal": 500,
+      "maxVal": 9000,
+      "step": 100,
+      "radius": 130
+    },
+    {
+      "container": 0,
+      "color": "#fd8123",
+      "minVal": 5,
+      "maxVal": 30,
+      "step": 5,
+      "radius": 100
+    },
+    {
+      "container": 0,
+      "color": "#fd3b3f",
+      "minVal": 0,
+      "maxVal": 4,
+      "step": 1,
+      "radius": 70
+    }
+  ]'>
+  </circular-slider>
+
 </body>
 </html>
