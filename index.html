@@ -24,12 +24,29 @@
 </head>
 
 <body>
+
+  
+  <div id="container" class="clear">
+    <div id="legend" class="col1_2">
+        <ul>
+            <li id="transportation"><span class="amount"></span><span class="title"><span id="purple">Transport</span>Transport</span></li>
+            <li id="food"><span class="amount"></span><span class="title"><span id="blue">Food</span>Food</span></li>
+            <li id="insurance"><span class="amount"></span><span class="title"><span id="green">Insurance</span>Insurance</span></li>
+            <li id="entertainment"><span class="amount"></span><span class="title"><span id="orange">Entertainment</span>Entertainment</span></li>
+            <li id="health-care"><span class="amount"></span><span class="title"><span id="red">Health care</span>Health care</span></li>
+        </ul>
+    </div>
+        <div id="sliderWrapper" class="col1_2">
+            <div id="slider"></div>
+            <span id="tip">Adjust dial to enter expenses</span>
+        </div>
+  </div>
   
   <circular-slider
     options = '[
     {
       "container": 0,
-      "color": "#5d3b6d",
+      "color": "#5C3B6D",
       "minVal": 0,
       "maxVal": 1000,
       "step": 500,
