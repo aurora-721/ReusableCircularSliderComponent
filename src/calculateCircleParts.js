@@ -35,3 +35,21 @@ export function calculateMousePosition(e, svg) {
     
     return deg;
 }
+
+export function calculateTouchPosition(e, svg) {
+    //relative position of cursor calculated, circle radius is subtracted so that the measurement is from the center
+    // e.clientX - position of the mouse on the screen
+    
+    let touchLocation = e.targetTouches[0];
+
+    let CTM = svg.getScreenCTM();
+    let dragX = (touchLocation.pageX - CTM.e) / CTM.a;
+    let dragY = (touchLocation.pageY - CTM.f) / CTM.d;
+    let mPos = {x: dragX, y: dragY};
+
+    //returns string that can be used to rotate the circle
+    let atan = Math.atan2(mPos.x, mPos.y);
+    let deg = -atan/(Math.PI/180) + 180;
+    
+    return deg;
+}

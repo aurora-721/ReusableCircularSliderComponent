@@ -1,7 +1,8 @@
 import {
     calculateClosestDeg,
     calculatePathLength,
-    calculateMousePosition
+    calculateMousePosition,
+    calculateTouchPosition
   } from './calculateCircleParts';
 
 import ListComponents from './listComponents';
@@ -38,6 +39,8 @@ export class CircularSlider extends HTMLElement {
 
         this.listComp = new ListComponents();
 
+        this.currentDeg = 0;
+
     }
 
     loadSliders() {
@@ -62,8 +65,7 @@ export class CircularSlider extends HTMLElement {
            
     }
 
-    changePosOnMouseOver(e, circle, path, options) {
-        let deg = calculateMousePosition(e, this.svg);
+    changePosOnMouseOver(e, circle, path, deg, options) {
         let fixed = calculateClosestDeg(deg, options);
 
         circle.style.transform = "rotate(" + deg + "deg)";
@@ -73,10 +75,7 @@ export class CircularSlider extends HTMLElement {
         return fixed.value;
     }
 
-
-
-    animateToFixedPosition(e, circle, path, options) {
-        let mouseDeg = calculateMousePosition(e, this.svg);
+    animateToFixedPosition(e, circle, path, mouseDeg, options) {
         let fixed = calculateClosestDeg(mouseDeg, options);
 
         circle.style.transform = "rotate("+ fixed.deg + "deg)";
@@ -103,23 +102,48 @@ export class CircularSlider extends HTMLElement {
                 item.style.transition = 'none';
                 circlePath[index].style.transition = 'none';
             })
+            item.addEventListener('touchstart', (e) => {
+                this.circleClicked[index] = true;
+                
+                //when mouse pressed there are no transitions
+                item.style.transition = 'none';
+                circlePath[index].style.transition = 'none';
+            })
             document.querySelector('html').addEventListener('mousemove', (e) => {
                 if(this.circleClicked[index]) {
-                    let val = this.changePosOnMouseOver(e, item, circlePath[index], this.presets[index]);
+                    let deg = calculateMousePosition(e, this.svg);
+                    let val = this.changePosOnMouseOver(e, item, circlePath[index], deg, this.presets[index]);
+                    this.listComp.writeToList(val, index);
+                }
+            })
+            document.querySelector('html').addEventListener('touchmove', (e) => {
+                if(this.circleClicked[index]) {
+                    this.currentDeg = calculateTouchPosition(e, this.svg);
+                    let val = this.changePosOnMouseOver(e, item, circlePath[index], this.currentDeg, this.presets[index]);
                     this.listComp.writeToList(val, index);
                 }
             })
             document.querySelector('html').addEventListener('mouseup', (e) => {
                 if(this.circleClicked[index]) {
                     this.circleClicked[index] = false;
-                    let val = this.animateToFixedPosition(e, item, circlePath[index], this.presets[index]);
+                    let deg = calculateMousePosition(e, this.svg);
+                    let val = this.animateToFixedPosition(e, item, circlePath[index], deg, this.presets[index]);
                     this.listComp.writeToList(val, index);
                     
                 }
             })
+            document.querySelector('html').addEventListener('touchend', (e) => {
+                if(this.circleClicked[index]) {
+                    this.circleClicked[index] = false;
+                    //let deg = calculateTouchPosition(e, this.svg);
+                    let val = this.animateToFixedPosition(e, item, circlePath[index], this.currentDeg, this.presets[index]);
+                    this.listComp.writeToList(val, index);
+                }
+            })
             invisibleLayer[index].addEventListener('mouseup', (e) => {
                 if (this.circleClicked.every(elem => elem == false)) {
-                    let val = this.animateToFixedPosition(e, item, circlePath[index], this.presets[index]);
+                    let deg = calculateMousePosition(e, this.svg);
+                    let val = this.animateToFixedPosition(e, item, circlePath[index], deg, this.presets[index]);
                     this.listComp.writeToList(val, index);
                 }
             })
