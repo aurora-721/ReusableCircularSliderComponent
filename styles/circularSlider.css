@@ -1,7 +1,3 @@
-#circularSliderRoot {
-  background-color: white;
-}
-
 #circularSliderRoot circle {
   fill: none;
   stroke-width: 10px;

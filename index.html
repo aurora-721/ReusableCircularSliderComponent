@@ -37,55 +37,58 @@
         </ul>
     </div>
         <div id="sliderWrapper" class="col1_2">
-            <div id="slider"></div>
+            <div id="slider">
+
+              <circular-slider
+                options = '[
+                {
+                  "container": 0,
+                  "color": "#5C3B6D",
+                  "minVal": 0,
+                  "maxVal": 1000,
+                  "step": 500,
+                  "radius": 180
+                },
+                {
+                  "container": 0,
+                  "color": "#127fc3",
+                  "minVal": 10,
+                  "maxVal": 20,
+                  "step": 2,
+                  "radius": 150
+                },
+                {
+                  "container": 0,
+                  "color": "#22a823",
+                  "minVal": 500,
+                  "maxVal": 9000,
+                  "step": 100,
+                  "radius": 120
+                },
+                {
+                  "container": 0,
+                  "color": "#fd8123",
+                  "minVal": 5,
+                  "maxVal": 30,
+                  "step": 5,
+                  "radius": 90
+                },
+                {
+                  "container": 0,
+                  "color": "#fd3b3f",
+                  "minVal": 0,
+                  "maxVal": 4,
+                  "step": 1,
+                  "radius": 60
+                }
+              ]'>
+              </circular-slider>
+
+            </div>
             <span id="tip">Adjust dial to enter expenses</span>
         </div>
   </div>
   
-  <circular-slider
-    options = '[
-    {
-      "container": 0,
-      "color": "#5C3B6D",
-      "minVal": 0,
-      "maxVal": 1000,
-      "step": 500,
-      "radius": 190
-    },
-    {
-      "container": 0,
-      "color": "#127fc3",
-      "minVal": 10,
-      "maxVal": 20,
-      "step": 2,
-      "radius": 160
-    },
-    {
-      "container": 0,
-      "color": "#22a823",
-      "minVal": 500,
-      "maxVal": 9000,
-      "step": 100,
-      "radius": 130
-    },
-    {
-      "container": 0,
-      "color": "#fd8123",
-      "minVal": 5,
-      "maxVal": 30,
-      "step": 5,
-      "radius": 100
-    },
-    {
-      "container": 0,
-      "color": "#fd3b3f",
-      "minVal": 0,
-      "maxVal": 4,
-      "step": 1,
-      "radius": 70
-    }
-  ]'>
-  </circular-slider>
 
 </body>
 </html>

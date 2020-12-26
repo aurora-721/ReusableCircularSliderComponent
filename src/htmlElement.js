@@ -4,6 +4,8 @@ import {
     calculateMousePosition
   } from './calculateCircleParts';
 
+import ListComponents from './listComponents';
+
 
 export class CircularSlider extends HTMLElement {
     constructor() {
@@ -34,6 +36,8 @@ export class CircularSlider extends HTMLElement {
         this.circleClicked = [false, false, false]; //important for events
         this.svg = this.shadowRoot.getElementById('circularSliderRoot');
 
+        this.listComp = new ListComponents();
+
     }
 
     loadSliders() {
@@ -60,23 +64,28 @@ export class CircularSlider extends HTMLElement {
 
     changePosOnMouseOver(e, circle, path, options) {
         let deg = calculateMousePosition(e, this.svg);
+        let fixed = calculateClosestDeg(deg, options);
 
         circle.style.transform = "rotate(" + deg + "deg)";
 
         path.style.strokeDasharray = calculatePathLength(deg, options);
+
+        return fixed.value;
     }
 
 
 
     animateToFixedPosition(e, circle, path, options) {
         let mouseDeg = calculateMousePosition(e, this.svg);
-        let deg = calculateClosestDeg(mouseDeg, options);
+        let fixed = calculateClosestDeg(mouseDeg, options);
 
-        circle.style.transform = "rotate("+ deg + "deg)";
+        circle.style.transform = "rotate("+ fixed.deg + "deg)";
         circle.style.transition =  "transform 0.4s cubic-bezier(0.33, 1, 0.68, 1)";
 
-        path.style.strokeDasharray = calculatePathLength(deg, options);
+        path.style.strokeDasharray = calculatePathLength(fixed.deg, options);
         path.style.transition = "stroke-dasharray 0.4s cubic-bezier(0.33, 1, 0.68, 1)";
+
+        return fixed.value;
     }
 
 
@@ -96,18 +105,22 @@ export class CircularSlider extends HTMLElement {
             })
             document.querySelector('html').addEventListener('mousemove', (e) => {
                 if(this.circleClicked[index]) {
-                    this.changePosOnMouseOver(e, item, circlePath[index], this.presets[index]);
+                    let val = this.changePosOnMouseOver(e, item, circlePath[index], this.presets[index]);
+                    this.listComp.writeToList(val, index);
                 }
             })
             document.querySelector('html').addEventListener('mouseup', (e) => {
                 if(this.circleClicked[index]) {
                     this.circleClicked[index] = false;
-                    this.animateToFixedPosition(e, item, circlePath[index], this.presets[index]);
+                    let val = this.animateToFixedPosition(e, item, circlePath[index], this.presets[index]);
+                    this.listComp.writeToList(val, index);
+                    
                 }
             })
             invisibleLayer[index].addEventListener('mouseup', (e) => {
                 if (this.circleClicked.every(elem => elem == false)) {
-                    this.animateToFixedPosition(e, item, circlePath[index], this.presets[index]);
+                    let val = this.animateToFixedPosition(e, item, circlePath[index], this.presets[index]);
+                    this.listComp.writeToList(val, index);
                 }
             })
         })

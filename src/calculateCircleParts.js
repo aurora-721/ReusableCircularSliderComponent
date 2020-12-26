@@ -7,7 +7,9 @@ export function calculateClosestDeg(mouseDeg, options) {
     let numOfAngleDeg = Math.round(mouseDeg/angleDeg);
     let deg = angleDeg * numOfAngleDeg;
 
-    return deg;
+    let value = numOfAngleDeg * options.step + options.minVal;
+
+    return {deg, value};
 }
 
 
