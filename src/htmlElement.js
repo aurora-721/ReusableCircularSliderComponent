@@ -6,17 +6,17 @@ import {
   } from './calculateCircleParts';
 
 import ListComponents from './listComponents';
+import CircularSlider from './circularSlider';
 
 
-export class CircularSlider extends HTMLElement {
+export class HtmlElementCircularSlider extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({mode: 'open'});
         
         // the options component
 
-        this.presets = [
-        {
+        this.options = [{
             container: 0,
             color: '#005',
             minVal: 1,
@@ -25,13 +25,15 @@ export class CircularSlider extends HTMLElement {
             radius: 50
         }];
         
-        this.circleConf = {
-            radius: 12,
+        this.additionalOptions = {
+            smallCircleRadius: 12,
         };
         
         this.getAttributesFromHtml();
 
-        this.loadSliders();
+        this.sliderElem = new CircularSlider(this.shadowRoot, this.options, this.additionalOptions);
+
+        //this.loadSliders();
      
 
         this.circleClicked = [false, false, false]; //important for events
@@ -49,15 +51,16 @@ export class CircularSlider extends HTMLElement {
         let input = ``;
         input = `
             <link rel="stylesheet" href="../styles/circularSlider.css" />
+            <div class="SVGcontainer">
                 <svg xmlns="http://www.w3.org/2000/svg" id="circularSliderRoot" width="700" height="700" viewBox="-200 -200 400 400">`;
-        for (let i = 0; i < this.presets.length; i++) {
-            input += `<circle cx="0" cy="0" r=${this.presets[i].radius} fill="none" class="dashed-circle" transform="rotate(-90)" style="stroke-width: 20px; stroke-dasharray: 5, 2;"></circle>
-                    <circle cx="0" cy="0" r=${this.presets[i].radius} fill="none" class="circle-path" transform="rotate(-90)" stroke-dasharray="110 628.3185307179587" stroke-dashoffset="0" style="stroke: ${this.presets[i].color}; stroke-width: 20px;"></circle>
-                    <circle cx="0" cy="0" r=${this.presets[i].radius} fill="none" class="invisible-layer" style="stroke-width: 20px; stroke: transparent;"></circle>
-                    <circle cx="0" cy=${-this.presets[i].radius} r=${this.circleConf.radius} fill="#fff" class="small-circle" style="transform: rotate(180deg); transition: all 0.5s ease-in-out 0s;"></circle>`;
+        for (let i = 0; i < this.options.length; i++) {
+            input += `<circle cx="0" cy="0" r=${this.options[i].radius} fill="none" class="dashed-circle" transform="rotate(-90)" style="stroke-width: 20px; stroke-dasharray: 5, 2;"></circle>
+                    <circle cx="0" cy="0" r=${this.options[i].radius} fill="none" class="circle-path" transform="rotate(-90)" stroke-dasharray="110 628.3185307179587" stroke-dashoffset="0" style="stroke: ${this.options[i].color}; stroke-width: 20px;"></circle>
+                    <circle cx="0" cy="0" r=${this.options[i].radius} fill="none" class="invisible-layer" style="stroke-width: 20px; stroke: transparent;"></circle>
+                    <circle cx="0" cy=${-this.options[i].radius} r=${this.circleConf.radius} fill="#fff" class="small-circle" style="transform: rotate(180deg); transition: all 0.5s ease-in-out 0s;"></circle>`;
         }
         input += ` </svg>
-                <slot name="individualSlider"/>`;
+            </div>`;
 
         template.innerHTML = input;
 
@@ -112,14 +115,14 @@ export class CircularSlider extends HTMLElement {
             document.querySelector('html').addEventListener('mousemove', (e) => {
                 if(this.circleClicked[index]) {
                     let deg = calculateMousePosition(e, this.svg);
-                    let val = this.changePosOnMouseOver(e, item, circlePath[index], deg, this.presets[index]);
+                    let val = this.changePosOnMouseOver(e, item, circlePath[index], deg, this.options[index]);
                     this.listComp.writeToList(val, index);
                 }
             })
             document.querySelector('html').addEventListener('touchmove', (e) => {
                 if(this.circleClicked[index]) {
                     this.currentDeg = calculateTouchPosition(e, this.svg);
-                    let val = this.changePosOnMouseOver(e, item, circlePath[index], this.currentDeg, this.presets[index]);
+                    let val = this.changePosOnMouseOver(e, item, circlePath[index], this.currentDeg, this.options[index]);
                     this.listComp.writeToList(val, index);
                 }
             })
@@ -127,7 +130,7 @@ export class CircularSlider extends HTMLElement {
                 if(this.circleClicked[index]) {
                     this.circleClicked[index] = false;
                     let deg = calculateMousePosition(e, this.svg);
-                    let val = this.animateToFixedPosition(e, item, circlePath[index], deg, this.presets[index]);
+                    let val = this.animateToFixedPosition(e, item, circlePath[index], deg, this.options[index]);
                     this.listComp.writeToList(val, index);
                     
                 }
@@ -136,17 +139,18 @@ export class CircularSlider extends HTMLElement {
                 if(this.circleClicked[index]) {
                     this.circleClicked[index] = false;
                     //let deg = calculateTouchPosition(e, this.svg);
-                    let val = this.animateToFixedPosition(e, item, circlePath[index], this.currentDeg, this.presets[index]);
+                    let val = this.animateToFixedPosition(e, item, circlePath[index], this.currentDeg, this.options[index]);
                     this.listComp.writeToList(val, index);
                 }
             })
             invisibleLayer[index].addEventListener('mouseup', (e) => {
                 if (this.circleClicked.every(elem => elem == false)) {
                     let deg = calculateMousePosition(e, this.svg);
-                    let val = this.animateToFixedPosition(e, item, circlePath[index], deg, this.presets[index]);
+                    let val = this.animateToFixedPosition(e, item, circlePath[index], deg, this.options[index]);
                     this.listComp.writeToList(val, index);
                 }
             })
+            
         })
     }
 
@@ -154,7 +158,7 @@ export class CircularSlider extends HTMLElement {
         //extract the defined attributes
         if (this.getAttribute('options')) {
             let forParsing = this.getAttribute('options');
-            this.presets = JSON.parse(forParsing);
+            this.options = JSON.parse(forParsing);
         }
     }
 }

@@ -1,3 +1,3 @@
-import {CircularSlider} from './htmlElement';
+import {HtmlElementCircularSlider} from './htmlElement';
 
-window.customElements.define('circular-slider', CircularSlider);
+window.customElements.define('circular-slider', HtmlElementCircularSlider);
