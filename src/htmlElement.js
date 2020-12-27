@@ -27,6 +27,8 @@ export class HtmlElementCircularSlider extends HTMLElement {
         
         this.additionalOptions = {
             smallCircleRadius: 12,
+            strokeWidth: 20,
+            dashedCircleWidth: 20,
         };
         
         this.getAttributesFromHtml();
