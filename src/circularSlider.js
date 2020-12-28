@@ -9,16 +9,14 @@ class CircularSlider {
         this.options = options;
         this.additionalOptions = additionalOptions;
 
-        
-
         this.loadSliders();
         
         //important for events
         this.circleClicked = []; 
         this.circleClicked.length = this.options.length;
         this.circleClicked.fill(false);
-        
-        this.svg = this.SVGlocation.getElementById('circularSliderRoot');
+
+        this.svg = this.SVGlocation.querySelector("#circularSliderRoot");
         
         this.listComp = new ListComponents();
         this.circleParts = new CalculateCircleParts();
@@ -52,11 +50,13 @@ class CircularSlider {
 
 
     setSartingPoints() {
-        let deg = 180;
+        //set starting points of the list and the slider
         const circlePath = this.SVGlocation.querySelectorAll('.circle-path');
-
-        this.SVGlocation.querySelectorAll('.small-circle').forEach((item, index) => {
-            let val = this.animateToFixedPosition(item, circlePath[index], deg, this.options[index]);
+        const smallCircle = this.SVGlocation.querySelectorAll('.small-circle');
+        this.options.forEach((option, index) => {
+            // from value calculates deg, so even if val is not precise it calculates it closest value
+            let deg = (option.value - option.minVal) / (option.maxVal - option.minVal) * 360;
+            let val = this.animateToFixedPosition(smallCircle[index], circlePath[index], deg, option);
             this.listComp.writeToList(val, index);
         });
     }
