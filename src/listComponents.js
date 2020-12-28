@@ -3,8 +3,10 @@ class ListComponents {
         this.amounts = document.querySelectorAll('.amount');
     }
 
-    writeToList(val, index) {
-        this.amounts[index].innerHTML = '$' + val;
+    writeToList(val, option) {
+        let div_label = document.querySelector("#" + option.labelID);
+        let place_here = div_label.querySelector('.amount');
+        place_here.innerHTML = '$' + val;
     }
 }
 

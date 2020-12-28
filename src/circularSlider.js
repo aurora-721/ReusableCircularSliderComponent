@@ -57,7 +57,7 @@ class CircularSlider {
             // from value calculates deg, so even if val is not precise it calculates it closest value
             let deg = (option.value - option.minVal) / (option.maxVal - option.minVal) * 360;
             let val = this.animateToFixedPosition(smallCircle[index], circlePath[index], deg, option);
-            this.listComp.writeToList(val, index);
+            this.listComp.writeToList(val, option);
         });
     }
 
@@ -110,14 +110,14 @@ class CircularSlider {
                 if(this.circleClicked[index]) {
                     let deg = this.circleParts.calculateMousePosition(e, this.svg);
                     let val = this.changePosOnMouseOver(e, item, circlePath[index], deg, this.options[index]);
-                    this.listComp.writeToList(val, index);
+                    this.listComp.writeToList(val, this.options[index]);
                 }
             })
             document.querySelector('html').addEventListener('touchmove', (e) => {
                 if(this.circleClicked[index]) {
                     this.currentDeg = this.circleParts.calculateTouchPosition(e, this.svg);
                     let val = this.changePosOnMouseOver(e, item, circlePath[index], this.currentDeg, this.options[index]);
-                    this.listComp.writeToList(val, index);
+                    this.listComp.writeToList(val, this.options[index]);
                 }
             })
             document.querySelector('html').addEventListener('mouseup', (e) => {
@@ -125,7 +125,7 @@ class CircularSlider {
                     this.circleClicked[index] = false;
                     let deg = this.circleParts.calculateMousePosition(e, this.svg);
                     let val = this.animateToFixedPosition(item, circlePath[index], deg, this.options[index]);
-                    this.listComp.writeToList(val, index);
+                    this.listComp.writeToList(val, this.options[index]);
                     
                 }
             })
@@ -134,14 +134,14 @@ class CircularSlider {
                     this.circleClicked[index] = false;
                     //let deg = calculateTouchPosition(e, this.svg);
                     let val = this.animateToFixedPosition(item, circlePath[index], this.currentDeg, this.options[index]);
-                    this.listComp.writeToList(val, index);
+                    this.listComp.writeToList(val, this.options[index]);
                 }
             })
             invisibleLayer[index].addEventListener('mouseup', (e) => {
                 if (this.circleClicked.every(elem => elem == false)) {
                     let deg = this.circleParts.calculateMousePosition(e, this.svg);
                     let val = this.animateToFixedPosition(item, circlePath[index], deg, this.options[index]);
-                    this.listComp.writeToList(val, index);
+                    this.listComp.writeToList(val, this.options[index]);
                 }
             })
             
