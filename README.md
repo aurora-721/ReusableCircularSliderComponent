@@ -5,7 +5,7 @@
 This code represents the solution for a reusable circular slider component. The code works on Google Chrome, Firefox and the latest version of Edge.
 This code uses web components that build on the Shadow DOM.
 
-![Slider Multiple](/pictures/example1.jpg)
+![Slider Multiple](/pictures/example1.JPG)
 
 ## Making the code work
 
@@ -53,7 +53,7 @@ All the styling and functionality can be changed in the files:
 
 `index-one.html` features all the possible attributes you can change.
 
-![Slider One](/pictures/example2.jpg)
+![Slider One](/pictures/example2.JPG)
 
 You can implement the html component by simply adding the circular-slider component in your html file.
 
