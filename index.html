@@ -40,7 +40,6 @@
             <div id="slider">
 
               <circular-slider
-                container = "blah-blah"
                 options = '[
                 {
                   "color": "#5C3B6D",
@@ -94,7 +93,35 @@
             <span id="tip">Adjust dial to enter expenses</span>
         </div>
   </div>
-  <div id="blah-blah"></div>
+  <div id="container" class="clear">
+    <div id="legend" class="col1_2">
+        <ul>
+            <li id="Test"><span class="amount"></span><span class="title"><span id="green">Test</span>Test</span></li>
+        </ul>
+    </div>
+  <div id="put_element_here"></div>
+  
+  <circular-slider
+      container = 'put_element_here'
+      options = '[
+      {
+        "color": "#22a823",
+        "labelID": "Test",
+        "minVal": 500,
+        "maxVal": 9000,
+        "value": 3400,
+        "step": 100,
+        "radius": 100
+      }
+    ]'
+    additional_options = '{
+      "dashedCircleWidth": "30",
+      "smallCircleRadius": "18",
+      "strokeWidth": "30"
+    }'
+  >
+  </circular-slider>
+
   
 
 </body>

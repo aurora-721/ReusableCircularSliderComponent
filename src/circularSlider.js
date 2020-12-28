@@ -1,8 +1,6 @@
 import CalculateCircleParts from './calculateCircleParts';
 import ListComponents from './listComponents';
 
-
-
 class CircularSlider {
     constructor(SVGlocation, options, additionalOptions) {
         this.SVGlocation = SVGlocation;

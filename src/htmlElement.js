@@ -50,5 +50,11 @@ export class HtmlElementCircularSlider extends HTMLElement {
         if (this.getAttribute('container')) {
             this.container = document.querySelector("#" + this.getAttribute('container'));
         }
+        if (this.getAttribute('additional_options')) {
+            let forParsing = this.getAttribute('additional_options');
+            console.log(forParsing);
+            this.additionalOptions = JSON.parse(forParsing);
+
+        }
     }
 }
