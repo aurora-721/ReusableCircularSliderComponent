@@ -1,8 +1,12 @@
 # Javascript circular slider component
 
-### Version
+![Slider Multiple](./pictures/example1.jpg)
+![Slider One](./pictures/example2.jpg)
 
-1.1.0
+## Introduction
+
+This code represents the solution for a reusable circular slider component. The code works on Google Chrome, Firefox and the latest verion of Edge.
+This code uses web components that build on the Shadow DOM.
 
 ### Installation
 
