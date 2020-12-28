@@ -7,10 +7,11 @@ export class HtmlElementCircularSlider extends HTMLElement {
         super();
         this.attachShadow({mode: 'open'});
         
+
+        // The default values of container, options and additionalOptions
         this.container = this.shadowRoot;
-        // the options component
+
         this.options = [{
-            container: 0,
             color: '#005',
             minVal: 1,
             maxVal: 220,
