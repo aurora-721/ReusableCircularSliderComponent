@@ -91,14 +91,15 @@ Container is where you can write the ID of the element, where you want the slide
 This is an array of objects that is parsed with JSON.
 When implementing be careful how you write the object so that the JSON doesn't throw any errors.
 
-| Options | Type    | Default | Description                                                                                                                         |
-| ------- | ------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| color   | string  | #005    | Progress bar color.                                                                                                                 |
-| minVal  | integer | 1       | Minimum value that can be set.                                                                                                      |
-| maxVal  | integer | 220     | Maximal value that can be set.                                                                                                      |
-| value   | integer | 51      | The default initial value of the slider when the browser starts.                                                                    |
-| step    | integer | 1       | The minimal step between two values - e.g. min = 0, max = 100, step = 10 - user can move between multiples of 10 between 0 and 100. |
-| radius  | integer | 50      | The slider will adjust to the size of the container automatically. Radius 200 means slider will be touching the boundaries.         |
+| Options | Type    | Default | Description                                                                                                                                                            |
+| ------- | ------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| color   | string  | #005    | Progress bar color.                                                                                                                                                    |
+| labelID | string  | none    | The ID of the location where the change in value of the slider will be displayed. Have a look at `index.html` or `index-one.html` to see how it should be implemented. |
+| minVal  | integer | 1       | Minimum value that can be set.                                                                                                                                         |
+| maxVal  | integer | 220     | Maximal value that can be set.                                                                                                                                         |
+| value   | integer | 51      | The default initial value of the slider when the browser starts.                                                                                                       |
+| step    | integer | 1       | The minimal step between two values - e.g. min = 0, max = 100, step = 10 - user can move between multiples of 10 between 0 and 100.                                    |
+| radius  | integer | 50      | The slider will adjust to the size of the container automatically. Radius 200 means slider will be touching the boundaries.                                            |
 
 ### Additional options
 
