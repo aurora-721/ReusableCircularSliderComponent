@@ -1,8 +1,4 @@
 class CalculateCircleParts {
-    constructor() {
-
-    }
-
     calculateClosestDeg(mouseDeg, options) {
         // Takes the difference between max and min value and divides it with step - this gives the num of slices
         let circleDivisions = (options.maxVal - options.minVal) / options.step;
@@ -17,13 +13,11 @@ class CalculateCircleParts {
         return {deg, value};
     }
 
-
     calculatePathLength(deg, options) {
         let circumference = 2 * Math.PI * options.radius;
         let angle = circumference * deg / 360;
         return angle + " " + circumference;
     }
-
 
     calculateMousePosition(e, svg) {
         //relative position of cursor calculated, circle radius is subtracted so that the measurement is from the center

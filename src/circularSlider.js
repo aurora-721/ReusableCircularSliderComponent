@@ -7,21 +7,21 @@ class CircularSlider {
         this.options = options;
         this.additionalOptions = additionalOptions;
 
-        this.loadSliders();
-        
         //important for events
         this.circleClicked = []; 
         this.circleClicked.length = this.options.length;
         this.circleClicked.fill(false);
 
-        this.svg = this.SVGlocation.querySelector("#circularSliderRoot");
-        
+        this.currentDeg = 0;      
+
         this.listComp = new ListComponents();
         this.circleParts = new CalculateCircleParts();
         
-        this.currentDeg = 0;
-        this.setSartingPoints();
+        // load individual sliders
+        this.loadSliders();
+        this.svg = this.SVGlocation.querySelector("#circularSliderRoot");
 
+        this.setSartingPoints();
     }
 
     loadSliders() {
@@ -33,12 +33,9 @@ class CircularSlider {
             <div class="SVGcontainer">
                 <svg xmlns="http://www.w3.org/2000/svg" id="circularSliderRoot" width="700" height="700" viewBox="-200 -200 400 400">`;
         for (let i = 0; i < this.options.length; i++) {
-            input += `<circle cx="0" cy="0" r=${this.options[i].radius} fill="none" class="dashed-circle" transform="rotate(-90)" style="stroke-width: ${this.additionalOptions.dashedCircleWidth}; stroke-dasharray: 5, 2;"></circle>
-                    <circle cx="0" cy="0" r=${this.options[i].radius} fill="none" class="circle-path" transform="rotate(-90)" stroke-dasharray="110 628.3185307179587" stroke-dashoffset="0" style="stroke: ${this.options[i].color}; stroke-width: ${this.additionalOptions.strokeWidth};"></circle>
-                    <circle cx="0" cy="0" r=${this.options[i].radius} fill="none" class="invisible-layer" style="stroke-width: ${this.additionalOptions.dashedCircleWidth}; stroke: transparent;"></circle>
-                    <circle cx="0" cy=${-this.options[i].radius} r=${this.additionalOptions.smallCircleRadius} fill="#fff" class="small-circle" style="transform: rotate(180deg); transition: all 0.5s ease-in-out 0s;"></circle>`;
+            input += this.loadSlider(i);
         }
-        input += ` </svg>
+        input += `</svg>
             </div>`;
 
         template.innerHTML = input;
@@ -46,6 +43,12 @@ class CircularSlider {
         this.SVGlocation.appendChild(template.content.cloneNode(true));
     }
 
+    loadSlider(i) {
+        return `<circle cx="0" cy="0" r=${this.options[i].radius} fill="none" class="dashed-circle" transform="rotate(-90)" style="stroke-width: ${this.additionalOptions.dashedCircleWidth}; stroke-dasharray: 5, 2;"></circle>
+                <circle cx="0" cy="0" r=${this.options[i].radius} fill="none" class="circle-path" transform="rotate(-90)" stroke-dasharray="110 628.3185307179587" stroke-dashoffset="0" style="stroke: ${this.options[i].color}; stroke-width: ${this.additionalOptions.strokeWidth};"></circle>
+                <circle cx="0" cy="0" r=${this.options[i].radius} fill="none" class="invisible-layer" style="stroke-width: ${this.additionalOptions.dashedCircleWidth}; stroke: transparent;"></circle>
+                <circle cx="0" cy=${-this.options[i].radius} r=${this.additionalOptions.smallCircleRadius} fill="#fff" class="small-circle" style="transform: rotate(180deg); transition: all 0.5s ease-in-out 0s;"></circle>`;        
+    }
 
     setSartingPoints() {
         //set starting points of the list and the slider
@@ -59,7 +62,6 @@ class CircularSlider {
         });
     }
 
-    
     changePosOnMouseOver(e, circle, path, deg, options) {
         let fixed = this.circleParts.calculateClosestDeg(deg, options);
 
@@ -97,13 +99,16 @@ class CircularSlider {
                 item.style.transition = 'none';
                 circlePath[index].style.transition = 'none';
             })
+            
             item.addEventListener('touchstart', (e) => {
                 this.circleClicked[index] = true;
                 
-                //when mouse pressed there are no transitions
+                // when touch pressed there are no transitions
                 item.style.transition = 'none';
                 circlePath[index].style.transition = 'none';
+
             })
+            
             document.querySelector('html').addEventListener('mousemove', (e) => {
                 if(this.circleClicked[index]) {
                     let deg = this.circleParts.calculateMousePosition(e, this.svg);
@@ -111,6 +116,7 @@ class CircularSlider {
                     this.listComp.writeToList(val, this.options[index]);
                 }
             })
+            
             document.querySelector('html').addEventListener('touchmove', (e) => {
                 if(this.circleClicked[index]) {
                     this.currentDeg = this.circleParts.calculateTouchPosition(e, this.svg);
@@ -118,6 +124,7 @@ class CircularSlider {
                     this.listComp.writeToList(val, this.options[index]);
                 }
             })
+
             document.querySelector('html').addEventListener('mouseup', (e) => {
                 if(this.circleClicked[index]) {
                     this.circleClicked[index] = false;
@@ -127,6 +134,7 @@ class CircularSlider {
                     
                 }
             })
+
             document.querySelector('html').addEventListener('touchend', (e) => {
                 if(this.circleClicked[index]) {
                     this.circleClicked[index] = false;
@@ -135,6 +143,7 @@ class CircularSlider {
                     this.listComp.writeToList(val, this.options[index]);
                 }
             })
+
             invisibleLayer[index].addEventListener('mouseup', (e) => {
                 if (this.circleClicked.every(elem => elem == false)) {
                     let deg = this.circleParts.calculateMousePosition(e, this.svg);
@@ -145,7 +154,6 @@ class CircularSlider {
             
         })    
     }
-
 }
 
 export default CircularSlider;

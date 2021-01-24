@@ -3,7 +3,7 @@
 ## Introduction
 
 This code represents the solution for a reusable circular slider component. The code works on Google Chrome, Firefox and the latest version of Edge.
-This code uses web components that build on the Shadow DOM.
+This code utilizes web components that build on the Shadow DOM.
 
 ![Slider Multiple](/pictures/example1.JPG)
 
@@ -55,7 +55,7 @@ All the styling and functionality can be changed in the files:
 
 ![Slider One](/pictures/example2.JPG)
 
-You can implement the html component by simply adding the circular-slider component in your html file.
+You can implement the HTML component by simply adding the circular-slider component in your HTML file.
 
 ```html
 <circular-slider
@@ -84,7 +84,7 @@ You can implement the html component by simply adding the circular-slider compon
 
 ### Container
 
-Container is where you can write the ID of the element, where you want the slider to be located on the virtual DOM. If omitted the circular slider will be placed where the circular-slider compone is written.
+The container attribute is reserved for the placement of the slider component anywhere else inside your HTML document. If omitted the circular slider will be placed where it was originally written.
 
 ### Options
 
@@ -103,7 +103,8 @@ When implementing be careful how you write the object so that the JSON doesn't t
 
 ### Additional options
 
-This attribute can be omitted. You can put an Object of following values if you want to change the default options:
+This attribute can be omitted.
+You can put an Object of following values if you want to change the default options:
 
 | Options           | Type    | Default | Description                                                           |
 | ----------------- | ------- | ------- | --------------------------------------------------------------------- |

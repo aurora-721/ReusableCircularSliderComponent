@@ -1,12 +1,9 @@
-
 import CircularSlider from './circularSlider';
-
 
 export class HtmlElementCircularSlider extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({mode: 'open'});
-        
 
         // The default values of container, options and additionalOptions
         this.container = this.shadowRoot;
@@ -26,15 +23,13 @@ export class HtmlElementCircularSlider extends HTMLElement {
             strokeWidth: 20,
         };
 
-        
         this.getAttributesFromHtml();
-        
 
         this.sliderElem = new CircularSlider(this.container, this.options, this.additionalOptions);
-
+        
     }
 
-
+    
 
     connectedCallback() {
         // call event listeners on shadow dom
@@ -47,15 +42,17 @@ export class HtmlElementCircularSlider extends HTMLElement {
             let forParsing = this.getAttribute('options');
             this.options = JSON.parse(forParsing);
         }
+
         // overrides the default container of shadow root
         if (this.getAttribute('container')) {
             this.container = document.querySelector("#" + this.getAttribute('container'));
         }
+
         if (this.getAttribute('additional_options')) {
             let forParsing = this.getAttribute('additional_options');
             console.log(forParsing);
             this.additionalOptions = JSON.parse(forParsing);
-
         }
     }
+    
 }
