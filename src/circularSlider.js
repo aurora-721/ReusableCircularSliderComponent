@@ -4,6 +4,7 @@ import ListComponents from './listComponents';
 class CircularSlider {
     constructor(SVGlocation, options, additionalOptions) {
         this.SVGlocation = SVGlocation;
+        this.svg; 
         this.options = options;
         this.additionalOptions = additionalOptions;
 
@@ -17,30 +18,10 @@ class CircularSlider {
         this.listComp = new ListComponents();
         this.circleParts = new CalculateCircleParts();
         
-        // load individual sliders
-        this.loadSliders();
-        this.svg = this.SVGlocation.querySelector("#circularSliderRoot");
-
-        this.setSartingPoints();
     }
 
-    loadSliders() {
-        const template = document.createElement('template');
-
-        let input = ``;
-        input = `
-            <link rel="stylesheet" href="../styles/circularSlider.css" />
-            <div class="SVGcontainer">
-                <svg xmlns="http://www.w3.org/2000/svg" id="circularSliderRoot" width="700" height="700" viewBox="-200 -200 400 400">`;
-        for (let i = 0; i < this.options.length; i++) {
-            input += this.loadSlider(i);
-        }
-        input += `</svg>
-            </div>`;
-
-        template.innerHTML = input;
-
-        this.SVGlocation.appendChild(template.content.cloneNode(true));
+    set setSvg(svg) {
+        this.svg = svg;
     }
 
     loadSlider(i) {
@@ -50,10 +31,10 @@ class CircularSlider {
                 <circle cx="0" cy=${-this.options[i].radius} r=${this.additionalOptions.smallCircleRadius} fill="#fff" class="small-circle" style="transform: rotate(180deg); transition: all 0.5s ease-in-out 0s;"></circle>`;        
     }
 
-    setSartingPoints() {
+    setStartingPoints() {
         //set starting points of the list and the slider
-        const circlePath = this.SVGlocation.querySelectorAll('.circle-path');
-        const smallCircle = this.SVGlocation.querySelectorAll('.small-circle');
+        const circlePath = this.svg.querySelectorAll('.circle-path');
+        const smallCircle = this.svg.querySelectorAll('.small-circle');
         this.options.forEach((option, index) => {
             // from value calculates deg, so even if val is not precise it calculates it closest value
             let deg = (option.value - option.minVal) / (option.maxVal - option.minVal) * 360;
@@ -86,12 +67,12 @@ class CircularSlider {
 
 
     eventListeners() {
-        const smallCircle = this.SVGlocation.querySelectorAll('.small-circle');
-        const circlePath = this.SVGlocation.querySelectorAll('.circle-path');
-        const invisibleLayer = this.SVGlocation.querySelectorAll('.invisible-layer');
+        const smallCircle = this.svg.querySelectorAll('.small-circle');
+        const circlePath = this.svg.querySelectorAll('.circle-path');
+        const invisibleLayer = this.svg.querySelectorAll('.invisible-layer');
         
         //mouse clicks on circle
-        this.SVGlocation.querySelectorAll('.small-circle').forEach((item, index) => {
+        this.svg.querySelectorAll('.small-circle').forEach((item, index) => {
             item.addEventListener('mousedown', (e) => {
                 this.circleClicked[index] = true;
                 

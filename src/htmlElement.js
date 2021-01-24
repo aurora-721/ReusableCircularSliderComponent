@@ -26,10 +26,30 @@ export class HtmlElementCircularSlider extends HTMLElement {
         this.getAttributesFromHtml();
 
         this.sliderElem = new CircularSlider(this.container, this.options, this.additionalOptions);
-        
+        this.loadSliders();
+        this.sliderElem.setStartingPoints();
+
     }
 
-    
+    loadSliders() {
+        const template = document.createElement('template');
+
+        let input = ``;
+        input = `
+            <link rel="stylesheet" href="../styles/circularSlider.css" />
+            <div class="SVGcontainer">
+                <svg xmlns="http://www.w3.org/2000/svg" id="circularSliderRoot" width="700" height="700" viewBox="-200 -200 400 400">`;
+        for (let i = 0; i < this.options.length; i++) {
+            input += this.sliderElem.loadSlider(i);
+        }
+        input += `</svg>
+            </div>`;
+
+        template.innerHTML = input;
+
+        this.container.appendChild(template.content.cloneNode(true));
+        this.sliderElem.setSvg = this.container.querySelector("#circularSliderRoot");
+    }
 
     connectedCallback() {
         // call event listeners on shadow dom
