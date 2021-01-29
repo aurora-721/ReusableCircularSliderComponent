@@ -29,41 +29,20 @@ export class HtmlElementCircularSlider extends HTMLElement {
         this.getAttributesFromHtml();
 
         this.loadSliders();
-        //this.sliderElem.setStartingPoints();
-
     }
 
     loadSliders() {  
-        const containerElement = this.initiateSVG(); 
-
-        this.options.forEach((option) => {
-            new CircularSlider(this.svg, option, this.additionalOptions);
-        });
-
-        containerElement.appendChild(this.svg);
-        this.container.appendChild(containerElement);        
-    }
-
-    initiateSVG() {
         //set div element
         const containerElement = document.createElement('div');
         containerElement.setAttribute("class", "SVGcontainer");
-
-        //set link element
-        const link = document.createElement('link');
-        setAttributes(link, {"rel": "stylesheet",
-                            "href": "../styles/circularSlider.css",
-                            "type": "text/css"});
-        containerElement.appendChild(link);
         
-        this.svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-        setAttributes(this.svg, {"xmlns": "http://www.w3.org/2000/svg",
-        "viewBox": "-200 -200 400 400",
-        "width": "700",
-        "height": "700",
-        "id": "circularSliderRoot" });
+        CircularSlider.svg = containerElement;
+        this.options.forEach((option) => {
+            new CircularSlider(option, this.additionalOptions);
+        });
 
-        return containerElement;
+        containerElement.appendChild(CircularSlider.svg);
+        this.container.appendChild(containerElement);
     }
 
     getAttributesFromHtml() {

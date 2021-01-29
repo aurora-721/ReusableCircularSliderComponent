@@ -6,13 +6,37 @@ import {calculateClosestDeg,
     from './calculateCircleParts';
 import ListComponents from './listComponents';
 
-let activeConst = false;
-
 class CircularSlider {
-    //bla = false
+    // class makes an individual slider componenet
+    static set svg(containerElement) {
+        //create svg element for all instances of Circlular slider
+        const link = document.createElement('link');        //set link element
+        setAttributes(link, {"rel": "stylesheet",
+                            "href": "../styles/circularSlider.css",
+                            "type": "text/css"});
+        containerElement.appendChild(link);
+        
+        //set svg
+        let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        setAttributes(svg, {"xmlns": "http://www.w3.org/2000/svg",
+                                "viewBox": "-200 -200 400 400",
+                                "width": "700",
+                                "height": "700",
+                                "id": "circularSliderRoot" });
 
-    constructor(svg, options, additionalOptions) {
-        this.svg = svg; 
+        this.constructor.svg = svg;
+    }
+
+    static get svg() {
+        return this.constructor.svg;
+    }
+
+    // bool so that other sliders are not affected
+    get activeConst() { return this.constructor.activeConst; }
+    set activeConst(value) { this.constructor.activeConst = value; }
+
+
+    constructor(options, additionalOptions) {
         this.options = options;
         this.additionalOptions = additionalOptions;
         
@@ -24,7 +48,7 @@ class CircularSlider {
         
         this.init();
     }
-    
+
     init() {
         this.loadEachSlider();
         this.setStartingPoints();
@@ -41,7 +65,7 @@ class CircularSlider {
                                 "style": `stroke-width: ${this.additionalOptions.strokeWidth}; stroke-dasharray: 5, 2;`,
                                 "cx": "0",
                                 "cy": "0"});
-        this.svg.appendChild(dashedCircle);
+        this.constructor.svg.appendChild(dashedCircle);
 
         const circlePath = document.createElementNS("http://www.w3.org/2000/svg", "circle");
         setAttributes(circlePath, {"r": this.options.radius,
@@ -54,7 +78,7 @@ class CircularSlider {
                                 "style": `stroke: ${this.options.color}; stroke-width: ${this.additionalOptions.strokeWidth};`,
                                 "cx": "0",
                                 "cy": "0"});
-        this.svg.appendChild(circlePath);
+        this.constructor.svg.appendChild(circlePath);
 
         const invisibleLayer = document.createElementNS("http://www.w3.org/2000/svg", "circle");
         setAttributes(invisibleLayer, {"r": this.options.radius,
@@ -65,7 +89,7 @@ class CircularSlider {
                                 "style": `stroke-width: ${this.additionalOptions.dashedCircleWidth}; stroke: transparent;`,
                                 "cx": "0",
                                 "cy": "0"});
-        this.svg.appendChild(invisibleLayer);
+        this.constructor.svg.appendChild(invisibleLayer);
 
         const smallCircle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
         setAttributes(smallCircle, {"r": this.additionalOptions.smallCircleRadius,
@@ -76,13 +100,13 @@ class CircularSlider {
                                 "style": `transform: rotate(180deg); transition: all 0.5s ease-in-out 0s;`,
                                 "cx": "0",
                                 "cy": -this.options.radius});
-        this.svg.appendChild(smallCircle);
+        this.constructor.svg.appendChild(smallCircle);
     }
 
     setStartingPoints() {
         //set starting points of the list and the slider
-        const circlePaths = this.svg.querySelector(`#${this.options.labelID}.circle-path`);
-        const smallCircles = this.svg.querySelector(`#${this.options.labelID}.small-circle`);
+        const circlePaths = this.constructor.svg.querySelector(`#${this.options.labelID}.circle-path`);
+        const smallCircles = this.constructor.svg.querySelector(`#${this.options.labelID}.small-circle`);
 
         // from value calculates deg, so even if val is not precise it calculates it closest value
         let deg = (this.options.value - this.options.minVal) / (this.options.maxVal - this.options.minVal) * 360;
@@ -114,15 +138,14 @@ class CircularSlider {
 
 
     eventListeners() {
-        const circlePath = this.svg.querySelector(`#${this.options.labelID}.circle-path`);
-        const smallCircle = this.svg.querySelector(`#${this.options.labelID}.small-circle`);
-        const invisibleLayer = this.svg.querySelector(`#${this.options.labelID}.invisible-layer`);
+        const circlePath = this.constructor.svg.querySelector(`#${this.options.labelID}.circle-path`);
+        const smallCircle = this.constructor.svg.querySelector(`#${this.options.labelID}.small-circle`);
+        const invisibleLayer = this.constructor.svg.querySelector(`#${this.options.labelID}.invisible-layer`);
         
         //mouse clicks on circle
-        //this.svg.querySelectorAll('.small-circle').forEach((smallCircle, index) => {
             smallCircle.addEventListener('mousedown', (e) => {
                 this.circleClicked = true;
-                activeConst = true;
+                this.activeConst = true;
 
                 //when mouse pressed there are no transitions
                 smallCircle.style.transition = 'none';
@@ -131,7 +154,7 @@ class CircularSlider {
             
             smallCircle.addEventListener('touchstart', (e) => {
                 this.circleClicked = true;
-                activeConst = true;
+                this.activeConst = true;
 
                 // when touch pressed there are no transitions
                 smallCircle.style.transition = 'none';
@@ -141,7 +164,7 @@ class CircularSlider {
             
             document.querySelector('html').addEventListener('mousemove', (e) => {
                 if(this.circleClicked) {
-                    let deg = calculateMousePosition(e, this.svg);
+                    let deg = calculateMousePosition(e, this.constructor.svg);
                     let val = this.changePosOnMouseOver(smallCircle, circlePath, deg);
                     this.listComp.writeToList(val);
                 }
@@ -149,7 +172,7 @@ class CircularSlider {
             
             document.querySelector('html').addEventListener('touchmove', (e) => {
                 if(this.circleClicked) {
-                    this.currentDeg = calculateTouchPosition(e, this.svg);
+                    this.currentDeg = calculateTouchPosition(e, this.constructor.svg);
                     let val = this.changePosOnMouseOver(smallCircle, circlePath, this.currentDeg);
                     this.listComp.writeToList(val);
                 }
@@ -158,8 +181,8 @@ class CircularSlider {
             document.querySelector('html').addEventListener('mouseup', (e) => {
                 if(this.circleClicked) {
                     this.circleClicked = false;
-                    activeConst = false;
-                    let deg = calculateMousePosition(e, this.svg);
+                    this.activeConst = false;
+                    let deg = calculateMousePosition(e, this.constructor.svg);
                     let val = this.animateToFixedPosition(smallCircle, circlePath, deg);
                     this.listComp.writeToList(val);
                     
@@ -169,16 +192,15 @@ class CircularSlider {
             document.querySelector('html').addEventListener('touchend', (e) => {
                 if(this.circleClicked) {
                     this.circleClicked = false;
-                    activeConst = false;
-                    //let deg = calculateTouchPosition(e, this.svg);
+                    this.activeConst = false;
                     let val = this.animateToFixedPosition(smallCircle, circlePath, this.currentDeg);
                     this.listComp.writeToList(val);
                 }
             })
 
             invisibleLayer.addEventListener('mouseup', (e) => {
-                if (!activeConst) {
-                    let deg = calculateMousePosition(e, this.svg);
+                if (!this.activeConst) {
+                    let deg = calculateMousePosition(e, this.constructor.svg);
                     let val = this.animateToFixedPosition(smallCircle, circlePath, deg);
                     this.listComp.writeToList(val);
                 }
