@@ -114,10 +114,9 @@ You can put an Object of following values if you want to change the default opti
 
 ## Modifying the code
 
-If you don't want to use HTML elements or want to modify the code independently, you can import `circularSlider.js` which consists of a class CircularSlider that makes a unique instance of a circular slider component.
+If you don't want to use HTML elements or modify the code independently import `circularSlider.js`. It consists of a class CircularSlider that makes a unique instance of a circular slider component.
 
-To freely use this class you have to provide a div container element where the svg element is going to be created. Store it inside `CircularSlider.svg` which will be present accross all instances of CircularSlider.
-For create more than one modify this code:
+To freely use this class, you have to provide a div container element where the SVG element will be stored. Store it inside `CircularSlider.svg` which will be present across all instances of CircularSlider.
 
 ```javascript
 //set div element
