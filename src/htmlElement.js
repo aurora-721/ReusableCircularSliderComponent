@@ -32,7 +32,7 @@ export class HtmlElementCircularSlider extends HTMLElement {
     }
 
     loadSliders() {  
-        //set div element
+        //create div element
         const containerElement = document.createElement('div');
         containerElement.setAttribute("class", "SVGcontainer");
         
@@ -41,7 +41,6 @@ export class HtmlElementCircularSlider extends HTMLElement {
             new CircularSlider(option, this.additionalOptions);
         });
 
-        containerElement.appendChild(CircularSlider.svg);
         this.container.appendChild(containerElement);
     }
 

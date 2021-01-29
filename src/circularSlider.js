@@ -23,7 +23,8 @@ class CircularSlider {
                                 "width": "700",
                                 "height": "700",
                                 "id": "circularSliderRoot" });
-
+    
+        containerElement.appendChild(svg);
         this.constructor.svg = svg;
     }
 

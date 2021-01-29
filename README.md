@@ -112,6 +112,26 @@ You can put an Object of following values if you want to change the default opti
 | smallCircleRadius | integer | 12      | Changes the radius of the small circle handle of the circular slider. |
 | strokeWidth       | integer | 20      | Changes the width of the path of the slider                           |
 
+## Modifying the code
+
+If you don't want to use HTML elements or want to modify the code independently, you can import `circularSlider.js` which consists of a class CircularSlider that makes a unique instance of a circular slider component.
+
+To freely use this class you have to provide a div container element where the svg element is going to be created. Store it inside `CircularSlider.svg` which will be present accross all instances of CircularSlider.
+For create more than one modify this code:
+
+```javascript
+//set div element
+const containerElement = document.createElement("div");
+containerElement.setAttribute("class", "SVGcontainer");
+
+CircularSlider.svg = containerElement;
+this.options.forEach((option) => {
+  new CircularSlider(option, this.additionalOptions);
+});
+
+this.container.appendChild(containerElement);
+```
+
 ## More Info
 
 ### Author
