@@ -1,58 +1,64 @@
-class CalculateCircleParts {
-    calculateClosestDeg(mouseDeg, options) {
-        // Takes the difference between max and min value and divides it with step - this gives the num of slices
-        let circleDivisions = (options.maxVal - options.minVal) / options.step;
-        // then 360 is divided with that number
-        let angleDeg = 360 / circleDivisions;
-        // rounds the angle to the nearest angle
-        let numOfAngleDeg = Math.round(mouseDeg/angleDeg);
-        let deg = angleDeg * numOfAngleDeg;
-
-        let value = numOfAngleDeg * options.step + options.minVal;
-
-        return {deg, value};
+export function setAttributes(el, attrs) {
+    for(var key in attrs) {
+        if (key == "xmlns") {
+            el.setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns', 'http://www.w3.org/2000/svg')
+        }
+        else {
+            el.setAttribute(key, attrs[key]);
+        }
     }
+  }
 
-    calculatePathLength(deg, options) {
-        let circumference = 2 * Math.PI * options.radius;
-        let angle = circumference * deg / 360;
-        return angle + " " + circumference;
-    }
+export function calculateClosestDeg(mouseDeg, options) {
+    // Takes the difference between max and min value and divides it with step - this gives the num of slices
+    let circleDivisions = (options.maxVal - options.minVal) / options.step;
+    // then 360 is divided with that number
+    let angleDeg = 360 / circleDivisions;
+    // rounds the angle to the nearest angle
+    let numOfAngleDeg = Math.round(mouseDeg/angleDeg);
+    let deg = angleDeg * numOfAngleDeg;
 
-    calculateMousePosition(e, svg) {
-        //relative position of cursor calculated, circle radius is subtracted so that the measurement is from the center
-        // e.clientX - position of the mouse on the screen
-        
-        let CTM = svg.getScreenCTM();
-        let dragX = (e.clientX - CTM.e) / CTM.a;
-        let dragY = (e.clientY - CTM.f) / CTM.d;
-        let mPos = {x: dragX, y: dragY};
+    let value = numOfAngleDeg * options.step + options.minVal;
 
-        //returns string that can be used to rotate the circle
-        let atan = Math.atan2(mPos.x, mPos.y);
-        let deg = -atan/(Math.PI/180) + 180;
-        
-        return deg;
-    }
-
-    calculateTouchPosition(e, svg) {
-        //relative position of cursor calculated, circle radius is subtracted so that the measurement is from the center
-        // e.clientX - position of the mouse on the screen
-        
-        let touchLocation = e.targetTouches[0];
-
-        let CTM = svg.getScreenCTM();
-        let dragX = (touchLocation.pageX - CTM.e) / CTM.a;
-        let dragY = (touchLocation.pageY - CTM.f) / CTM.d;
-        let mPos = {x: dragX, y: dragY};
-
-        //returns string that can be used to rotate the circle
-        let atan = Math.atan2(mPos.x, mPos.y);
-        let deg = -atan/(Math.PI/180) + 180;
-        
-        return deg;
-    }
-
+    return {deg, value};
 }
 
-export default CalculateCircleParts;
+export function calculatePathLength(deg, options) {
+    let circumference = 2 * Math.PI * options.radius;
+    let angle = circumference * deg / 360;
+    return angle + " " + circumference;
+}
+
+export function calculateMousePosition(e, svg) {
+    //relative position of cursor calculated, circle radius is subtracted so that the measurement is from the center
+    // e.clientX - position of the mouse on the screen
+    
+    let CTM = svg.getScreenCTM();
+    let dragX = (e.clientX - CTM.e) / CTM.a;
+    let dragY = (e.clientY - CTM.f) / CTM.d;
+    let mPos = {x: dragX, y: dragY};
+
+    //returns string that can be used to rotate the circle
+    let atan = Math.atan2(mPos.x, mPos.y);
+    let deg = -atan/(Math.PI/180) + 180;
+    
+    return deg;
+}
+
+export function calculateTouchPosition(e, svg) {
+    //relative position of cursor calculated, circle radius is subtracted so that the measurement is from the center
+    // e.clientX - position of the mouse on the screen
+    
+    let touchLocation = e.targetTouches[0];
+
+    let CTM = svg.getScreenCTM();
+    let dragX = (touchLocation.pageX - CTM.e) / CTM.a;
+    let dragY = (touchLocation.pageY - CTM.f) / CTM.d;
+    let mPos = {x: dragX, y: dragY};
+
+    //returns string that can be used to rotate the circle
+    let atan = Math.atan2(mPos.x, mPos.y);
+    let deg = -atan/(Math.PI/180) + 180;
+    
+    return deg;
+}

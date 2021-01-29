@@ -1,4 +1,5 @@
 import CircularSlider from './circularSlider';
+import {setAttributes} from './calculateCircleParts';
 
 export class HtmlElementCircularSlider extends HTMLElement {
     constructor() {
@@ -7,6 +8,8 @@ export class HtmlElementCircularSlider extends HTMLElement {
 
         // The default values of container, options and additionalOptions
         this.container = this.shadowRoot;
+
+        this.svg;
 
         this.options = [{
             color: '#005',
@@ -25,35 +28,42 @@ export class HtmlElementCircularSlider extends HTMLElement {
 
         this.getAttributesFromHtml();
 
-        this.sliderElem = new CircularSlider(this.container, this.options, this.additionalOptions);
         this.loadSliders();
-        this.sliderElem.setStartingPoints();
+        //this.sliderElem.setStartingPoints();
 
     }
 
-    loadSliders() {
-        const template = document.createElement('template');
+    loadSliders() {  
+        const containerElement = this.initiateSVG(); 
 
-        let input = ``;
-        input = `
-            <link rel="stylesheet" href="../styles/circularSlider.css" />
-            <div class="SVGcontainer">
-                <svg xmlns="http://www.w3.org/2000/svg" id="circularSliderRoot" width="700" height="700" viewBox="-200 -200 400 400">`;
-        for (let i = 0; i < this.options.length; i++) {
-            input += this.sliderElem.loadSlider(i);
-        }
-        input += `</svg>
-            </div>`;
+        this.options.forEach((option) => {
+            new CircularSlider(this.svg, option, this.additionalOptions);
+        });
 
-        template.innerHTML = input;
-
-        this.container.appendChild(template.content.cloneNode(true));
-        this.sliderElem.setSvg = this.container.querySelector("#circularSliderRoot");
+        containerElement.appendChild(this.svg);
+        this.container.appendChild(containerElement);        
     }
 
-    connectedCallback() {
-        // call event listeners on shadow dom
-        this.sliderElem.eventListeners();
+    initiateSVG() {
+        //set div element
+        const containerElement = document.createElement('div');
+        containerElement.setAttribute("class", "SVGcontainer");
+
+        //set link element
+        const link = document.createElement('link');
+        setAttributes(link, {"rel": "stylesheet",
+                            "href": "../styles/circularSlider.css",
+                            "type": "text/css"});
+        containerElement.appendChild(link);
+        
+        this.svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        setAttributes(this.svg, {"xmlns": "http://www.w3.org/2000/svg",
+        "viewBox": "-200 -200 400 400",
+        "width": "700",
+        "height": "700",
+        "id": "circularSliderRoot" });
+
+        return containerElement;
     }
 
     getAttributesFromHtml() {

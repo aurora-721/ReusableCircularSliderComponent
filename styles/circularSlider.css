@@ -15,7 +15,7 @@
   touch-action: none;
 }
 
-#circularSliderRoot circle {
+circle {
   fill: none;
   stroke-width: 10px;
   overflow: visible;
